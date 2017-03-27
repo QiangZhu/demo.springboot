@@ -1,0 +1,5 @@
+demo\springboot\jdbc\jpa\service\ScoreService.class
+demo\springboot\jdbc\jpa\dto\ScoreDTO.class
+demo\springboot\jdbc\jpa\controller\ScoreController.class
+demo\springboot\jdbc\jpa\Application.class
+demo\springboot\jdbc\jpa\core\Score.class
