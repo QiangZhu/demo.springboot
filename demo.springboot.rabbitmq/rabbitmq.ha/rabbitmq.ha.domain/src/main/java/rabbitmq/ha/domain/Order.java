@@ -6,25 +6,31 @@ public class Order implements Serializable {
 
 	private static final long serialVersionUID = -5810415223475626164L;
 	
-	private Integer id;
+	private Long id;
+	private String uuid;
 	private String description;
 	private OrderType type;
 
-	public Order() {
-
-	}
-
-	public Order(Integer id, String description, OrderType type) {
+	public Order(Long id, String uuid, String description, OrderType type) {
 		this.id = id;
+		this.uuid = uuid;
 		this.description = description;
 		this.type = type;
 	}
+	
+	public String getUuid() {
+		return uuid;
+	}
 
-	public Integer getId() {
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -46,6 +52,6 @@ public class Order implements Serializable {
 
 	@Override
 	public String toString() {
-		return String.format("Order[id=%d, type=%s]", id, type);
+		return String.format("Order[id=%d,uuid=%s,desc=%s, type=%s]",id,uuid,description,type);
 	}
 }
