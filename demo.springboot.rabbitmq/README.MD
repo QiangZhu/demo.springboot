@@ -36,5 +36,9 @@
 	sudo docker stop rabbit2
 	sudo docker stop rabbit1
 	
+	http://192.168.153.27:30001
+	http://192.168.153.27:30003
+	http://192.168.153.27:30005
+	
 ## Reference
 [rabbitmq-in-cluster]( https://dzone.com/articles/rabbitmq-in-cluster)
