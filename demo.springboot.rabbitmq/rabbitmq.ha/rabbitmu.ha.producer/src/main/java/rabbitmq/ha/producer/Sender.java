@@ -34,7 +34,10 @@ public class Sender {
 	
 	@Value("${test.rabbitmq.sleeptime}")
 	private int testRabbitmqSleeptime;
-
+	
+	@Value("${test.rabbitmq.expired}")
+	private int testRabbitmqExpired;
+	
 	@Autowired
 	RabbitTemplate template;
 
@@ -43,6 +46,7 @@ public class Sender {
 	private static AtomicLong increment = new AtomicLong();
 	private static final Random random = new Random();
 	private static final int DEFAULT_STEEPTIME_MILLISECONDS = 1000;
+	private static final long start = System.currentTimeMillis();
 	
 	
 	
@@ -57,6 +61,9 @@ public class Sender {
 		
 		if(testRabbitmqCount <= 0 ){
 			while(true){
+				if(System.currentTimeMillis() > start + testRabbitmqExpired){
+					break;
+				}
 				execute();
 				logger.info(String.format("[send rabbitmq message ] id : %d", increment.get()));
 				try {
