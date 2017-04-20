@@ -17,10 +17,13 @@
 	sudo docker run -d --hostname rabbit2 --name rabbit2 --link rabbit1:rabbit1 -e RABBITMQ_ERLANG_COOKIE='rabbitcluster' -p 30002:5672 -p 30003:15672 rabbitmq:management
 	sudo docker run -d --hostname rabbit3 --name rabbit3 --link rabbit1:rabbit1 --link rabbit2:rabbit2 -e RABBITMQ_ERLANG_COOKIE='rabbitcluster' -p 30004:5672 -p 30005:15672 rabbitmq:management
 
-	sudo docker start rabbit1
-	sudo docker start rabbit2
-	sudo docker start rabbit3
 	su -
+	
+	service docker start
+	
+	docker start rabbit1
+	docker start rabbit2 
+	docker start rabbit3
 	
 	docker exec -i -t rabbit2 \bash
 	root@rabbit2:/# rabbitmqctl stop_app
