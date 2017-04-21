@@ -35,13 +35,15 @@
 	root@rabbit3:/# rabbitmqctl join_cluster rabbit@rabbit1
 	root@rabbit3:/# rabbitmqctl start_app
 	
+	rabbitmqctl set_policy ha-all "" '{"ha-mode":"all","ha-sync-mode":"automatic"}'
+	
 	sudo docker stop rabbit3
 	sudo docker stop rabbit2
 	sudo docker stop rabbit1
 	
-	http://192.168.153.27:30001
-	http://192.168.153.27:30003
-	http://192.168.153.27:30005
+	http://192.168.153.27:30001   guest/guest
+	http://192.168.153.27:30003   guest/guest
+	http://192.168.153.27:30005   guest/guest
 	
 ## Reference
 [rabbitmq-in-cluster]( https://dzone.com/articles/rabbitmq-in-cluster)
