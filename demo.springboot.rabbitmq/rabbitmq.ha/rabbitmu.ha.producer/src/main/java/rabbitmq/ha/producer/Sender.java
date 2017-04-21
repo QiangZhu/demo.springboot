@@ -6,6 +6,10 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -20,15 +24,6 @@ import rabbitmq.ha.domain.OrderType;
 @SpringBootApplication
 public class Sender {
 
-	@Value("${spring.rabbitmq.addresses}")
-	private String springRabbitmqAddresses;
-
-	@Value("${spring.rabbitmq.username}")
-	private String springRabbitmqUsername;
-
-	@Value("${spring.rabbitmq.password}")
-	private String springRabbitmqPassword;
-
 	@Value("${test.rabbitmq.count}")
 	private int testRabbitmqCount;
 	
@@ -42,13 +37,26 @@ public class Sender {
 	RabbitTemplate template;
 
 	private static Logger logger = LoggerFactory.getLogger(Sender.class);
-	private static final String QUEUE_NAME = "rabbitmq-ha";
+	private static final String QUEUE_NAME = "rabbitmq-ha-demo";
 	private static AtomicLong increment = new AtomicLong();
 	private static final Random random = new Random();
 	private static final int DEFAULT_STEEPTIME_MILLISECONDS = 1000;
 	private static final long start = System.currentTimeMillis();
 	
+	@Bean
+	Queue queue() {
+		return new Queue(QUEUE_NAME, false);
+	}
 	
+	@Bean
+	TopicExchange exchange() {
+		return new TopicExchange("rabbitmq-ha-demo-exchange");
+	}
+	
+	@Bean
+	Binding binding(Queue queue, TopicExchange exchange) {
+		return BindingBuilder.bind(queue).to(exchange).with(QUEUE_NAME);
+	}
 	
 	private void execute(){
 		int id = random.nextInt(testRabbitmqCount <= 0 ? Integer.MAX_VALUE : testRabbitmqCount);
@@ -58,7 +66,6 @@ public class Sender {
 
 	@PostConstruct
 	public void send() {
-		
 		if(testRabbitmqCount <= 0 ){
 			while(true){
 				if(System.currentTimeMillis() > start + testRabbitmqExpired){
@@ -77,22 +84,6 @@ public class Sender {
 				execute();
 			}
 		}
-	}
-
-	@Bean
-	public ConnectionFactory connectionFactory() {
-		CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-		connectionFactory.setAddresses(springRabbitmqAddresses);
-		connectionFactory.setUsername(springRabbitmqUsername);
-		connectionFactory.setPassword(springRabbitmqPassword);
-		return connectionFactory;
-	}
-
-	@Bean
-	public RabbitTemplate template() {
-		RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory());
-		// rabbitTemplate.setExchange("q.example");
-		return rabbitTemplate;
 	}
 
 	public static void main(String[] args) {

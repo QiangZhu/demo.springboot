@@ -13,7 +13,8 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class Application {
-	final static String queueName = "spring-boot";
+	
+	final static String queueName = "rabbitmq-ha";
 
 	@Bean
 	Queue queue() {
@@ -22,7 +23,7 @@ public class Application {
 
 	@Bean
 	TopicExchange exchange() {
-		return new TopicExchange("spring-boot-exchange");
+		return new TopicExchange("rabbitmq-ha-exchange");
 	}
 
 	@Bean

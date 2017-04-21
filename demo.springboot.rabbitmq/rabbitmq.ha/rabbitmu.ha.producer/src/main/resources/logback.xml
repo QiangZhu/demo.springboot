@@ -32,4 +32,8 @@
 		<appender-ref ref="dailyRollingFileAppender"/>
 	</logger>
 	
+	<logger name="org.springframework" level="INFO" >
+		<appender-ref ref="dailyRollingFileAppender"/>
+	</logger>
+	
 </configuration>
