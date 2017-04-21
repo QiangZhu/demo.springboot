@@ -19,7 +19,7 @@
 
 	<modules>
 		<module>rabbitmq.ha.consumer</module>
-		<module>rabbitmu.ha.producer</module>
+		<module>rabbitmq.ha.producer</module>
 		<module>rabbitmq.ha.domain</module>
 	</modules>
 </project>

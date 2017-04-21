@@ -6,7 +6,7 @@
 		<artifactId>rabbitmq.ha</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>rabbitmu.ha.producer</artifactId>
+	<artifactId>rabbitmq.ha.producer</artifactId>
 	<dependencies>
 		<dependency>
 			<groupId>com.yixin</groupId>
