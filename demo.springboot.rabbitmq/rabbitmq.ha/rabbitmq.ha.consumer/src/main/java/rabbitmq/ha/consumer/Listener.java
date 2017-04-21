@@ -8,6 +8,7 @@ import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -16,21 +17,25 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class Listener {
 	
-	private static final String QUEUE_NAME = "rabbitmq-ha-demo";
+	@Value("${spring.rabbitmq.queuename}")
+	private String springRabbitmqQueueName;
+	
+	@Value("${spring.rabbitmq.exchangename}")
+	private String springRabbitmqExchangeName;
 	
 	@Bean
 	public Queue queue() {
-		return new Queue(QUEUE_NAME,false);
+		return new Queue(springRabbitmqQueueName,false);
 	}
 	
 	@Bean
 	TopicExchange exchange() {
-		return new TopicExchange("rabbitmq-ha-demo-exchange");
+		return new TopicExchange(springRabbitmqExchangeName);
 	}
 	
 	@Bean
 	Binding binding(Queue queue, TopicExchange exchange) {
-		return BindingBuilder.bind(queue).to(exchange).with(QUEUE_NAME);
+		return BindingBuilder.bind(queue).to(exchange).with(springRabbitmqQueueName);
 	}
 
 	@Bean
@@ -38,7 +43,7 @@ public class Listener {
 			MessageListenerAdapter listenerAdapter) {
 		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
 		container.setConnectionFactory(connectionFactory);
-		container.setQueueNames(QUEUE_NAME);
+		container.setQueueNames(springRabbitmqQueueName);
 		container.setMessageListener(listenerAdapter);
 		return container;
 	}

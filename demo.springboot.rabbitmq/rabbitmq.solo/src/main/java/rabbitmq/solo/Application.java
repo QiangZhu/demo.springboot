@@ -7,6 +7,7 @@ import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -15,20 +16,27 @@ import org.springframework.context.annotation.Bean;
 public class Application {
 	
 	final static String queueName = "rabbitmq-ha";
+	
+	
+	@Value("${spring.rabbitmq.queuename}")
+	private String springRabbitmqQueueName;
+	
+	@Value("${spring.rabbitmq.exchangename}")
+	private String springRabbitmqExchangeName;
 
 	@Bean
 	Queue queue() {
-		return new Queue(queueName, false);
+		return new Queue(springRabbitmqQueueName, false);
 	}
 
 	@Bean
 	TopicExchange exchange() {
-		return new TopicExchange("rabbitmq-ha-exchange");
+		return new TopicExchange(springRabbitmqExchangeName);
 	}
 
 	@Bean
 	Binding binding(Queue queue, TopicExchange exchange) {
-		return BindingBuilder.bind(queue).to(exchange).with(queueName);
+		return BindingBuilder.bind(queue).to(exchange).with(springRabbitmqQueueName);
 	}
 
 	@Bean

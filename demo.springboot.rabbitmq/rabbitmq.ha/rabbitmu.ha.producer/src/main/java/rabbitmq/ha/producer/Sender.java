@@ -23,6 +23,13 @@ import rabbitmq.ha.domain.OrderType;
 
 @SpringBootApplication
 public class Sender {
+	
+	
+	@Value("${spring.rabbitmq.queuename}")
+	private String springRabbitmqQueueName;
+	
+	@Value("${spring.rabbitmq.exchangename}")
+	private String springRabbitmqExchangeName;
 
 	@Value("${test.rabbitmq.count}")
 	private int testRabbitmqCount;
@@ -37,7 +44,6 @@ public class Sender {
 	RabbitTemplate template;
 
 	private static Logger logger = LoggerFactory.getLogger(Sender.class);
-	private static final String QUEUE_NAME = "rabbitmq-ha-demo";
 	private static AtomicLong increment = new AtomicLong();
 	private static final Random random = new Random();
 	private static final int DEFAULT_STEEPTIME_MILLISECONDS = 1000;
@@ -45,22 +51,22 @@ public class Sender {
 	
 	@Bean
 	Queue queue() {
-		return new Queue(QUEUE_NAME, false);
+		return new Queue(springRabbitmqQueueName, false);
 	}
 	
 	@Bean
 	TopicExchange exchange() {
-		return new TopicExchange("rabbitmq-ha-demo-exchange");
+		return new TopicExchange(springRabbitmqExchangeName);
 	}
 	
 	@Bean
 	Binding binding(Queue queue, TopicExchange exchange) {
-		return BindingBuilder.bind(queue).to(exchange).with(QUEUE_NAME);
+		return BindingBuilder.bind(queue).to(exchange).with(springRabbitmqQueueName);
 	}
 	
 	private void execute(){
 		int id = random.nextInt(testRabbitmqCount <= 0 ? Integer.MAX_VALUE : testRabbitmqCount);
-		template.convertAndSend(QUEUE_NAME, new Order(increment.incrementAndGet(), UUID.randomUUID().toString(),
+		template.convertAndSend(springRabbitmqQueueName, new Order(increment.incrementAndGet(), UUID.randomUUID().toString(),
 				"TEST" + String.valueOf(id), OrderType.values()[(id % 2)]));
 	}
 
