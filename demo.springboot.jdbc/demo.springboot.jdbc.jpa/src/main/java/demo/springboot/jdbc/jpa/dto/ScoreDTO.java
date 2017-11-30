@@ -22,6 +22,10 @@ public class ScoreDTO {
 	private float score;
 
 	private Date examTime;
+	
+	private String remark;
+	
+	private short status;
 
 	public int getStuId() {
 		return stuId;
@@ -53,6 +57,52 @@ public class ScoreDTO {
 
 	public void setExamTime(Date examTime) {
 		this.examTime = examTime;
+	}
+	
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public short getStatus() {
+		return status;
+	}
+
+	public void setStatus(short status) {
+		this.status = status;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("ScoreDTO [stuId=");
+		builder.append(stuId);
+		builder.append(", ");
+		if (subjectName != null) {
+			builder.append("subjectName=");
+			builder.append(subjectName);
+			builder.append(", ");
+		}
+		builder.append("score=");
+		builder.append(score);
+		builder.append(", ");
+		if (examTime != null) {
+			builder.append("examTime=");
+			builder.append(examTime);
+			builder.append(", ");
+		}
+		if (remark != null) {
+			builder.append("remark=");
+			builder.append(remark);
+			builder.append(", ");
+		}
+		builder.append("status=");
+		builder.append(status);
+		builder.append("]");
+		return builder.toString();
 	}
 
 }

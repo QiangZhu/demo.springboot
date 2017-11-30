@@ -39,7 +39,7 @@ public class ScoreController {
 	@Autowired
 	private ScoreService scoreService;
 
-	@RequestMapping(value="/scoreList")
+	@RequestMapping(value="/l")
 	public List<Score> getScoreList() {
 		logger.info("从数据库读取Score集合");
 		// 测试更新数据库
@@ -47,17 +47,17 @@ public class ScoreController {
 		return scoreService.getList();
 	}
 	
-	@RequestMapping(value = "/insert")
+	@RequestMapping(value = "/i")
 	public Score insert(@RequestBody ScoreDTO scoreDto){
 		return scoreService.save(convert(scoreDto));
 	}
 	
-	@RequestMapping("/update")
+	@RequestMapping("/u")
 	public Score update(@RequestBody ScoreDTO scoreDto){
 		return scoreService.save(convert(scoreDto));
 	}
 	
-	@RequestMapping("/delete")
+	@RequestMapping("/d")
 	public Integer update(Integer id){
 		 scoreService.delete(id);
 		 return id;

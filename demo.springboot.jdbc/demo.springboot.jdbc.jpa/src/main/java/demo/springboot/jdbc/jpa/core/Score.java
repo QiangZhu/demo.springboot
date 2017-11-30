@@ -34,7 +34,10 @@ public class Score implements Serializable {
 	@GeneratedValue
 	private int id;
 
-	// 这里说一下，我使用指定数据库列的时候，使用小写会不起作用，修改为大写便正常了。不知道为何，如果遇到一样问题的可以尝试下。
+	/**
+	 * 这里说一下，我使用指定数据库列的时候，使用小写会不起作用，
+	 * 修改为大写便正常了。不知道为何，如果遇到一样问题的可以尝试下。
+	 */
 	@Column(nullable = false, name = "STUDENTID") 
 	private int stuId;
 
@@ -46,6 +49,12 @@ public class Score implements Serializable {
 
 	@Column(nullable = false, name = "EXAMTIME")
 	private Date examTime;
+	
+	@Column(nullable = false, name = "REMARK")
+	private String remark;
+	
+	@Column(nullable = false, name = "STATUS")
+	private short status;
 
 	public int getId() {
 		return id;
@@ -87,10 +96,51 @@ public class Score implements Serializable {
 		this.examTime = examTime;
 	}
 
-	@Override
-	public String toString() {
-		return "Score [id=" + id + ", stuId=" + stuId + ", subjectName=" + subjectName + ", score=" + score
-				+ ", examTime=" + examTime + "]";
+	public String getRemark() {
+		return remark;
 	}
 
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public short getStatus() {
+		return status;
+	}
+
+	public void setStatus(short status) {
+		this.status = status;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Score [id=");
+		builder.append(id);
+		builder.append(", stuId=");
+		builder.append(stuId);
+		builder.append(", ");
+		if (subjectName != null) {
+			builder.append("subjectName=");
+			builder.append(subjectName);
+			builder.append(", ");
+		}
+		builder.append("score=");
+		builder.append(score);
+		builder.append(", ");
+		if (examTime != null) {
+			builder.append("examTime=");
+			builder.append(examTime);
+			builder.append(", ");
+		}
+		if (remark != null) {
+			builder.append("remark=");
+			builder.append(remark);
+			builder.append(", ");
+		}
+		builder.append("status=");
+		builder.append(status);
+		builder.append("]");
+		return builder.toString();
+	}
 }
