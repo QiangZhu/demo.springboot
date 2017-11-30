@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.yixin</groupId>
-    <artifactId>demo.springboot.web.jsp</artifactId>
+    <artifactId>demo.springboot.web</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>demo.springboot.web.jsp.sample2</artifactId>
