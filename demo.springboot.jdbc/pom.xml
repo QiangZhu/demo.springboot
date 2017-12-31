@@ -124,6 +124,7 @@
 		<module>demo.springbot.jdbc.mybatis</module>
 		<module>demo.springboot.jdbc.mybatis</module>
 		<module>demo.springboot.jdbc.mybatis.bysocket</module>
+		<module>customdatasource</module>
 	</modules>
 
 </project>

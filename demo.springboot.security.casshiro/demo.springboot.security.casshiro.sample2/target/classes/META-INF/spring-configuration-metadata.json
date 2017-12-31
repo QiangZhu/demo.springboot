@@ -1,0 +1,42 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "com.fable.shiro.domain.CasConfig",
+      "name": "cas",
+      "type": "com.fable.shiro.domain.CasConfig"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.fable.shiro.domain.CasConfig",
+      "name": "cas.cas-filter-url-pattern",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.fable.shiro.domain.CasConfig",
+      "name": "cas.cas-server-login-url",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.fable.shiro.domain.CasConfig",
+      "name": "cas.cas-server-logout-url",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.fable.shiro.domain.CasConfig",
+      "name": "cas.cas-server-url-prefix",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.fable.shiro.domain.CasConfig",
+      "name": "cas.local-server-login-url",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.fable.shiro.domain.CasConfig",
+      "name": "cas.local-server-url-prefix",
+      "type": "java.lang.String"
+    }
+  ]
+}
