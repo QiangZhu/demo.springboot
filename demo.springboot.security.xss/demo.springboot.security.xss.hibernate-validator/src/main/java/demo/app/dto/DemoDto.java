@@ -13,7 +13,8 @@ public class DemoDto implements Serializable{
 	private static final long serialVersionUID = -5713813997980727070L;
 	
 	
-	@SafeHtml(whitelistType = WhiteListType.SIMPLE_TEXT)
+	//@SafeHtml(whitelistType = WhiteListType.SIMPLE_TEXT)
+	@SafeHtml
 	private String name;
 
 
