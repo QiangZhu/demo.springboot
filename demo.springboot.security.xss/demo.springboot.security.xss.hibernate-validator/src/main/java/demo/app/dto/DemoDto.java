@@ -16,24 +16,39 @@ public class DemoDto implements Serializable{
 	//@SafeHtml(whitelistType = WhiteListType.SIMPLE_TEXT)
 	@SafeHtml
 	private String name;
-
-
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("DemoDto [name=");
-		builder.append(name);
-		builder.append("]");
-		return builder.toString();
-	}
+	
+	private String account;
 
 	public String getName() {
 		return name;
 	}
 
-
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	public String getAccount() {
+		return account;
+	}
+
+	public void setAccount(String account) {
+		this.account = account;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("DemoDto [");
+		if (name != null) {
+			builder.append("name=");
+			builder.append(name);
+			builder.append(", ");
+		}
+		if (account != null) {
+			builder.append("account=");
+			builder.append(account);
+		}
+		builder.append("]");
+		return builder.toString();
+	}
 }
