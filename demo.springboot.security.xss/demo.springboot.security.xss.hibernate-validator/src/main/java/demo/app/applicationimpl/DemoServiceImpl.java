@@ -57,11 +57,4 @@ public class DemoServiceImpl implements DemoService {
 		return true;
 	}
 
-	
-	public static void main(String[] args) throws IllegalArgumentException, IllegalAccessException {
-		DemoDto demoDto = new DemoDto();
-		demoDto.setName("zhuqiang");
-		demoDto.setAccount("<script>zhuqiang</script>");
-		System.out.println(validate(demoDto));
-	}
 }
