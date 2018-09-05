@@ -1,0 +1,6 @@
+column: 1,2
+filepath: sampledata2.csv
+interval: 9999
+learning: 100
+offset: 32698016
+url: http://localhost:8080/health
