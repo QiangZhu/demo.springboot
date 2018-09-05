@@ -6,6 +6,7 @@ import sys
 import yaml
 import socket
 import os
+from kafka import KafkaProducer
 from  datetime  import  * 
 
 """
@@ -90,35 +91,70 @@ def rename(source_filename,target_filename) :
     if os.path.exists(target_filename) and os.path.isfile(target_filename):
         os.remove(target_filename)     
     os.rename(source_filename,target_filename) 
+    
+def error(fin_path,error_path,final_error_path,error_number) :
+    if error_number > 1 : 
+        final_error_path = get_final_error_path(fin_path)
+        rename(error_path,final_error_path)
+    else :
+        os.remove(error_path)
+
 
 def extract(fin_path,offset = 0,interval = 10000 , recommend = 1):
     line_number = 0
+    error_number = 0
     current_offset = offset
     fout_path  = get_fout_path(fin_path)
     error_path = get_error_path(fin_path)
     with open(fin_path) as fin,open(fout_path, "a") as fout, \
         open(error_path,'a') as ferror:
         fin.seek(offset)
-        for raw_lines in fin:
-            current_offset += len(raw_lines)
+        for raw_line in fin:
+            current_offset += len(raw_line)
             config['offset'] = current_offset
             print("offset : %s" % current_offset)
-            line = raw_lines.rstrip('\n') 
+            line = raw_line.rstrip('\n') 
             num_column = len(line.split(","))
             if num_column >= recommend :
-                    fout.write(raw_lines)
+                    fout.write(raw_line)
             else:
-                ferror.write(raw_lines)
+                error_number += 1
+                ferror.write(raw_line)
             if line_number < interval :
                 line_number += 1
             else :
                 refresh_yaml()
                 line_number = 0
-    final_ok_path = get_final_ok_path(fin_path)
-    final_error_path = get_final_error_path(fin_path)
-    rename(fout_path,final_ok_path)
-    rename(error_path,final_error_path)
+    rename(fout_path,get_final_ok_path(fin_path))
+    error(fin_path,error_path,get_final_error_path(fin_path),error_number)
+
     
+def extract_to_kafka(fin_path,offset = 0,interval = 10000 , recommend = 1) :
+    line_number = 0
+    error_number = 0
+    current_offset = offset
+    fout_path  = get_fout_path(fin_path)
+    error_path = get_error_path(fin_path)
+    producer = KafkaProducer(bootstrap_servers='192.168.1.7:9092')
+    with open(fin_path) as fin,open(error_path,'a') as ferror:
+        fin.seek(offset)
+        for raw_line in fin:
+            current_offset += len(raw_line)
+            config['offset'] = current_offset
+            print("offset : %s" % current_offset)
+            line = raw_line.rstrip('\n') 
+            num_column = len(line.split(","))
+            if num_column >= recommend :
+                    producer.send('demo', raw_line.encode('utf-8'))
+            else:
+                error_number += 1
+                ferror.write(raw_line)
+            if line_number < interval :
+                line_number += 1
+            else :
+                refresh_yaml()
+                line_number = 0
+    error(fin_path,error_path,get_final_error_path(fin_path),error_number) 
 
 def get_local_ip():
     try:
@@ -173,7 +209,7 @@ def run() :
     offset = config['offset']
     interval = config['interval']
     recommend = get_column_by_score(fin_path)
-    extract(fin_path,offset,interval,recommend)
+    extract_to_kafka(fin_path,offset,interval,recommend)
 
 if __name__ == "__main__" : 
 
