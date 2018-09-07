@@ -19,15 +19,16 @@ public class DemoService {
         Set<String> keyValues = datas.keySet();
         for (String keyValue: keyValues) {
             String[] temp = keyValue.split(",");
-            SortedSet values = null;
-            if (map.containsKey(temp[0])){
-                values = map.get(temp[0]);
+            if (temp != null && temp.length >= 2){
+                SortedSet values = null;
+                if (map.containsKey(temp[0])) {
+                    values = map.get(temp[0]);
+                } else {
+                    values = new TreeSet<String>();
+                }
+                values.add(temp[1]);
+                map.put(temp[0], values);
             }
-            else{
-                values = new TreeSet<String>();
-            }
-            values.add(temp[1]);
-            map.put(temp[0],values);
         }
         List<DemoDto> result = new ArrayList();
         for (Map.Entry<String, SortedSet<String>> entry : map.entrySet()) {
