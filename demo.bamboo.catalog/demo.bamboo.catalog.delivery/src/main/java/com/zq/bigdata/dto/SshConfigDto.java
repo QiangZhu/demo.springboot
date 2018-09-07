@@ -1,12 +1,8 @@
-package com.zq.bigdata.config;
+package com.zq.bigdata.dto;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
-import java.util.List;
-
-@Component
-public class SshConfig  {
+public class SshConfigDto {
 
     @Value("${ip}")
     private String ip;
@@ -23,7 +19,7 @@ public class SshConfig  {
     @Value("${dir}")
     private String targetDir;
 
-    private List<String> sourceFilePaths;
+    private String sourceFilePaths;
 
     public String getIp() {
         return ip;
@@ -65,23 +61,23 @@ public class SshConfig  {
         this.targetDir = targetDir;
     }
 
-    public List<String> getSourceFilePaths() {
+    public String getSourceFilePaths() {
         return sourceFilePaths;
     }
 
-    public void setSourceFilePaths(List<String> sourceFilePaths) {
+    public void setSourceFilePaths(String sourceFilePaths) {
         this.sourceFilePaths = sourceFilePaths;
     }
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("SshConfig{");
+        final StringBuffer sb = new StringBuffer("SshConfigDto{");
         sb.append("ip='").append(ip).append('\'');
         sb.append(", port='").append(port).append('\'');
         sb.append(", user='").append(user).append('\'');
         sb.append(", password='").append(password).append('\'');
-        sb.append(", targeDir='").append(targetDir).append('\'');
-        sb.append(", soourceFilePaths=").append(String.join(", ",sourceFilePaths));
+        sb.append(", targetDir='").append(targetDir).append('\'');
+        sb.append(", sourceFilePaths=").append(sourceFilePaths);
         sb.append('}');
         return sb.toString();
     }

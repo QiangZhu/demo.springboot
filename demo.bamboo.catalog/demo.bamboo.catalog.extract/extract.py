@@ -10,6 +10,8 @@ from kafka import KafkaProducer
 from  datetime  import  * 
 
 """
+    kafka-broker-list: kafka100:9092
+    kafka-topic: demo
     filepath : sample.csv
     offset : 0
     interval : 7
@@ -98,7 +100,13 @@ def error(fin_path,error_path,final_error_path,error_number) :
         rename(error_path,final_error_path)
     else :
         os.remove(error_path)
+        
+def get_kafka_brokerlist() :
+    return config['kafka-broker-list']
 
+   
+def get_kafka_topic() :
+    return config['kafka-topic']
 
 def extract(fin_path,offset = 0,interval = 10000 , recommend = 1):
     line_number = 0
@@ -135,7 +143,7 @@ def extract_to_kafka(fin_path,offset = 0,interval = 10000 , recommend = 1) :
     current_offset = offset
     fout_path  = get_fout_path(fin_path)
     error_path = get_error_path(fin_path)
-    producer = KafkaProducer(bootstrap_servers='192.168.1.7:9092')
+    producer = KafkaProducer(bootstrap_servers=get_kafka_brokerlist())
     with open(fin_path) as fin,open(error_path,'a') as ferror:
         fin.seek(offset)
         for raw_line in fin:
@@ -144,8 +152,9 @@ def extract_to_kafka(fin_path,offset = 0,interval = 10000 , recommend = 1) :
             print("offset : %s" % current_offset)
             line = raw_line.rstrip('\n') 
             num_column = len(line.split(","))
+            #producer.send('raw', raw_line.encode('utf-8'))
             if num_column >= recommend :
-                    producer.send('demo', raw_line.encode('utf-8'))
+                    producer.send(get_kafka_topic() , raw_line.encode('utf-8'))
             else:
                 error_number += 1
                 ferror.write(raw_line)
@@ -154,6 +163,7 @@ def extract_to_kafka(fin_path,offset = 0,interval = 10000 , recommend = 1) :
             else :
                 refresh_yaml()
                 line_number = 0
+    producer.flush()
     error(fin_path,error_path,get_final_error_path(fin_path),error_number) 
 
 def get_local_ip():
@@ -178,30 +188,6 @@ def get_data():
     
 def init():
     print(config)
-    # validate file path
-    filepath = config['filepath']
-    url = config['url']
-    if url is None:
-        sys.exit(0)
-    if filepath is None :
-        error = {"status":"error","data":"filepath is none"}
-        request(error)
-        sys.exit(0)
-    params = sys.argv
-    if len(params) > 1:
-       offset = params[1]
-       config['offset'] = int(offset)
-    if len(params) > 2:
-        interval = params[2]
-        config['interval'] = int(interval)
-    if len(params) > 3:
-       learning = params[3]
-       config['learning'] = int(learning)  
-    if len(params) > 4:
-       column = params[4]
-       config['column'] = column
-    print(config)
-
     
 def run() :
     init()

@@ -3,8 +3,8 @@ package com.zq.bigdata.service;
 import com.jcraft.jsch.Session;
 import com.zq.bigdata.common.SshFileSender;
 import com.zq.bigdata.common.SshSession;
+import com.zq.bigdata.common.SshShellExecuter;
 import com.zq.bigdata.config.SshConfig;
-import com.zq.bigdata.controller.DeliveryController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +12,8 @@ import java.io.File;
 
 @Component
 public class DeliveryService {
+
+    private static final String PYTHON_NAME = "extract.py";
 
     @Autowired
     private SshConfig sshConfig;
@@ -21,11 +23,17 @@ public class DeliveryService {
         Session session = sshSession.openSession(sshConfig.getUser(), sshConfig.getPassword(),
                 sshConfig.getIp(),sshConfig.getPort());
         SshFileSender fileSender = new SshFileSender(session);
-        System.out.println(DeliveryService.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-        boolean isUploaded = fileSender.upload(sshConfig.getDir(), new File(
-                "d:/test/python/extract/extract.py"));
-        boolean isFileUploaded = fileSender.upload(
-                sshConfig.getDir(), new File("d:/test/python/extract/extract.yaml"));
-        System.out.println(sshConfig);
+        for (String filepath : sshConfig.getSourceFilePaths()) {
+            boolean isFileUploaded = fileSender.upload(sshConfig.getTargetDir(), new File(filepath));
+        }
+        SshShellExecuter executer = null ;
+        try {
+            executer = new SshShellExecuter(session);
+            StringBuilder command = new StringBuilder();
+            command.append(" python ").append(sshConfig.getTargetDir()).append("/").append(PYTHON_NAME);
+            executer.execute(command.toString());
+        }catch(Exception e) {
+
+        }
     }
 }

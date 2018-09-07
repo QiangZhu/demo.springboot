@@ -1,6 +1,8 @@
+kafka-broker-list: kafka100:9092
+kafka-topic: demo
 column: 1,2
-filepath: sampledata2.csv
+filepath: sample.csv
 interval: 9999
 learning: 100
-offset: 32698016
+offset: 0
 url: http://localhost:8080/health
