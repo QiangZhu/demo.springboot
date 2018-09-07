@@ -30,8 +30,11 @@ public class DeliveryService {
         try {
             executer = new SshShellExecuter(session);
             StringBuilder command = new StringBuilder();
-            command.append(" python ").append(sshConfig.getTargetDir()).append("/").append(PYTHON_NAME);
-            executer.execute(command.toString());
+            command.append(" cd ").append(sshConfig.getTargetDir()).append(" ; ");
+            command.append(" nohup python ").append(PYTHON_NAME)
+                    .append(" </dev/null >/dev/null 2>&1 & ");
+            executer.executeWithoutResult(command.toString());
+            System.out.println(command.toString());
         }catch(Exception e) {
 
         }

@@ -38,6 +38,13 @@ public class SshShellExecuter {
 		return buffer.toString();
 	}
 
+	public void executeWithoutResult(String command) throws IOException, JSchException{
+		ChannelExec channelExec = openChannelExec(session);
+		channelExec.setCommand(command);
+		channelExec.connect();
+		closeChannelExec(channelExec);
+	}
+
 	private StringBuffer executeCommand(String command, ChannelExec channelExec)
 			throws IOException, JSchException {
 		InputStream result = channelExec.getInputStream();
