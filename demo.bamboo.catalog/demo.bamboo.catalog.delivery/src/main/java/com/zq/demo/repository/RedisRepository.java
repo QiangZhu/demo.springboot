@@ -1,6 +1,6 @@
-package com.zq.bigdata.repository;
+package com.zq.demo.repository;
 
-import com.zq.bigdata.model.DemoData;
+import com.zq.demo.model.FinalData;
 
 import java.util.Map;
 
@@ -14,7 +14,7 @@ public interface RedisRepository {
     /**
      * Add key-value pair to Redis.
      */
-    void add(DemoData demoData);
+    void add(FinalData demoData);
 
     /**
      * Delete a key-value pair in Redis.
@@ -24,6 +24,6 @@ public interface RedisRepository {
     /**
      * find a movie
      */
-    DemoData findByKeyValue(String keyValue);
+    FinalData findByKeyValue(String keyValue);
     
 }

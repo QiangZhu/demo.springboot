@@ -1,6 +1,6 @@
-package com.zq.bigdata.repository;
+package com.zq.demo.repository;
 
-import com.zq.bigdata.model.DemoData;
+import com.zq.demo.model.FinalData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -26,7 +26,7 @@ public class RedisRepositoryImpl implements RedisRepository {
         hashOperations = redisTemplate.opsForHash();
     }
     
-    public void add(final DemoData demoData) {
+    public void add(final FinalData demoData) {
         String keyValue = demoData.getKey()+","+demoData.getValue();
         hashOperations.put(KEY, keyValue, keyValue);
     }
@@ -35,8 +35,8 @@ public class RedisRepositoryImpl implements RedisRepository {
         hashOperations.delete(KEY, key);
     }
     
-    public DemoData findByKeyValue(final String keyValue){
-        return (DemoData) hashOperations.get(KEY, keyValue);
+    public FinalData findByKeyValue(final String keyValue){
+        return (FinalData) hashOperations.get(KEY, keyValue);
     }
     
     public Map<String, String> findAllDemoDatas(){

@@ -1,11 +1,11 @@
-package com.zq.bigdata.dto;
+package com.zq.demo.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
 
 @JsonIgnoreProperties
-public class DemoDto {
+public class FinalDto {
 
     private String key;
     private List<String> values;
@@ -28,7 +28,7 @@ public class DemoDto {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("DemoDto{");
+        final StringBuffer sb = new StringBuffer("FinalDto{");
         sb.append("key='").append(key).append('\'');
         sb.append(", values=").append(String.join(", ", values));
         sb.append('}');

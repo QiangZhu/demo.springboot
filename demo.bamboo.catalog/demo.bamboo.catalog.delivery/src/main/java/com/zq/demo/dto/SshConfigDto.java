@@ -1,22 +1,15 @@
-package com.zq.bigdata.dto;
-
-import org.springframework.beans.factory.annotation.Value;
+package com.zq.demo.dto;
 
 public class SshConfigDto {
 
-    @Value("${ip}")
     private String ip;
 
-    @Value("${port}")
     private String port;
 
-    @Value("${user}")
     private String user;
 
-    @Value("${password}")
     private String password;
 
-    @Value("${dir}")
     private String targetDir;
 
     private String sourceFilePaths;
@@ -75,9 +68,9 @@ public class SshConfigDto {
         sb.append("ip='").append(ip).append('\'');
         sb.append(", port='").append(port).append('\'');
         sb.append(", user='").append(user).append('\'');
-        sb.append(", password='").append(password).append('\'');
+        sb.append(", password='").append("*****").append('\'');
         sb.append(", targetDir='").append(targetDir).append('\'');
-        sb.append(", sourceFilePaths=").append(sourceFilePaths);
+        sb.append(", sourceFilePaths='").append(sourceFilePaths).append('\'');
         sb.append('}');
         return sb.toString();
     }

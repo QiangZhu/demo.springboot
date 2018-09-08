@@ -1,4 +1,4 @@
-package com.zq.bigdata.config;
+package com.zq.demo.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -79,7 +79,7 @@ public class SshConfig  {
         sb.append("ip='").append(ip).append('\'');
         sb.append(", port='").append(port).append('\'');
         sb.append(", user='").append(user).append('\'');
-        sb.append(", password='").append(password).append('\'');
+        sb.append(", password='").append("******").append('\'');
         sb.append(", targeDir='").append(targetDir).append('\'');
         sb.append(", soourceFilePaths=").append(String.join(", ",sourceFilePaths));
         sb.append('}');

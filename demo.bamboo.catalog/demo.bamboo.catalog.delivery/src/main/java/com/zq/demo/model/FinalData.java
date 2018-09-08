@@ -1,8 +1,8 @@
-package com.zq.bigdata.model;
+package com.zq.demo.model;
 
 import java.io.Serializable;
 
-public class DemoData implements Serializable {
+public class FinalData implements Serializable {
 
     private String key;
 
@@ -26,7 +26,7 @@ public class DemoData implements Serializable {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("DemoData{");
+        final StringBuffer sb = new StringBuffer("FinalData{");
         sb.append("key='").append(key).append('\'');
         sb.append(", value='").append(value).append('\'');
         sb.append('}');

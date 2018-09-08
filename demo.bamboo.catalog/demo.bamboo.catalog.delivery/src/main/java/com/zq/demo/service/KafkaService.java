@@ -1,7 +1,7 @@
-package com.zq.bigdata.service;
+package com.zq.demo.service;
 
-import com.zq.bigdata.model.DemoData;
-import com.zq.bigdata.repository.RedisRepository;
+import com.zq.demo.model.FinalData;
+import com.zq.demo.repository.RedisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,7 @@ public class KafkaService {
 	public void consumer(String message) {
 
 		String[] datas = message.split(",");
-		DemoData demoData = new DemoData();
+		FinalData demoData = new FinalData();
 		demoData.setKey(datas[1]);
 		demoData.setValue(datas[2]);
 		System.out.print("====>"+message);

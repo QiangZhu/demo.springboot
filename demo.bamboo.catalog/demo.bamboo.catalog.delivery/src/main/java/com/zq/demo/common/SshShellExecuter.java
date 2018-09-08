@@ -1,4 +1,4 @@
-package com.zq.bigdata.common;
+package com.zq.demo.common;
 
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
