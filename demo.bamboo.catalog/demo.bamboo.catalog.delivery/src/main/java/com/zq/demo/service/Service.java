@@ -28,7 +28,7 @@ public class Service {
 
     @Autowired
     private RedisRepository redisRepository;
-    
+
     @Autowired
     private SshConfig sshConfig;
 
@@ -98,8 +98,8 @@ public class Service {
     private String getPid(Session session) throws IOException, JSchException{
         SshShellExecuter executer = new SshShellExecuter(session);
         StringBuilder check = new StringBuilder();
-        check.append("ps -ef | grep ").append("\"").append(session.getUserName()).append(".*python ").append(
-                (PYTHON_NAME).append("\"");
+        check.append("ps -ef | grep ").append("\"").append(session.getUserName()).append(".*python ")
+                .append(PYTHON_NAME).append("\"");
         String response = executer.execute(check.toString());
         int keyIndex = response.indexOf(PYTHON_NAME);
         String pid = "";
