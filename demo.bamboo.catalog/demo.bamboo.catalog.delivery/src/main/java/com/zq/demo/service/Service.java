@@ -10,6 +10,8 @@ import com.zq.demo.dto.ExecDto;
 import com.zq.demo.dto.FinalDto;
 import com.zq.demo.repository.RedisRepository;
 import io.netty.util.internal.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,11 +23,12 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class Service {
 
-    @Autowired
-    private RedisRepository redisRepository;
-
+    private static final Logger logger = LoggerFactory.getLogger(Service.class);
     private static final String PYTHON_NAME = "extract.py";
 
+    @Autowired
+    private RedisRepository redisRepository;
+    
     @Autowired
     private SshConfig sshConfig;
 
@@ -68,8 +71,6 @@ public class Service {
         for (String filepath : sshConfig.getSourceFilePaths()) {
             boolean isFileUploaded = fileSender.upload(sshConfig.getTargetDir(), new File(filepath));
         }
-
-
     }
 
     public ExecDto execute(ExecDto execDto) throws IOException, JSchException,IllegalStateException{
@@ -97,9 +98,10 @@ public class Service {
     private String getPid(Session session) throws IOException, JSchException{
         SshShellExecuter executer = new SshShellExecuter(session);
         StringBuilder check = new StringBuilder();
-        check.append("ps -ef | grep ").append("\"").append(session.getUserName()).append(".*python extract.py\"");
+        check.append("ps -ef | grep ").append("\"").append(session.getUserName()).append(".*python ").append(
+                (PYTHON_NAME).append("\"");
         String response = executer.execute(check.toString());
-        int keyIndex = response.indexOf("extract.py");
+        int keyIndex = response.indexOf(PYTHON_NAME);
         String pid = "";
         if (keyIndex != -1 ){
             String s  = response.substring(0,keyIndex);
@@ -132,7 +134,7 @@ public class Service {
         executer = new SshShellExecuter(session);
         StringBuilder command = new StringBuilder();
         if(!StringUtil.isNullOrEmpty(execDto.getPid())){
-            command.append(" ps -ef | grep 'python extract.py ' ");
+            command.append(" ps -ef | grep 'python ").append(PYTHON_NAME).append("' ");
             String response = executer.execute(command.toString());
             if(execDto.getPid().equals(getPid(session))) {
                 command.append(" kill -9  ").append(execDto.getPid());

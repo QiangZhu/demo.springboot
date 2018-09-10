@@ -5,6 +5,8 @@ import com.zq.demo.dto.ExecDto;
 import com.zq.demo.dto.FinalDto;
 import com.zq.demo.dto.SshConfigDto;
 import com.zq.demo.service.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +15,8 @@ import java.util.List;
 
 @RestController
 public class Controller {
+
+    private static final Logger logger = LoggerFactory.getLogger(Controller.class);
 
     @Autowired
     private Service service;
@@ -38,6 +42,7 @@ public class Controller {
             sshConfig.setSourceFilePaths(Arrays.asList(sshConfigDto.getSourceFilePaths().split(",")));
             service.deliver();
         } catch (Exception e) {
+            logger.error("It's failed to delivery {},",sshConfigDto,e);
         }
         return sshConfigDto;
     }
@@ -48,6 +53,7 @@ public class Controller {
         try{
             return  service.execute(execDto);
         }catch(Exception e){
+            logger.error("It's failed to execute {}",execDto,e);
         }
         return execDto;
     }
@@ -58,6 +64,7 @@ public class Controller {
         try{
             service.cancel(execDto);
         }catch(Exception e){
+            logger.error("It's failed to cancel {},",execDto,e);
         }
         return execDto;
     }
