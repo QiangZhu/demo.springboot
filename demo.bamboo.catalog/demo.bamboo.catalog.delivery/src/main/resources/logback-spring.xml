@@ -2,9 +2,13 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}/}spring.log}"/>
-
     <springProfile name="dev">
         <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>%d{yy-MMMM-dd HH:mm:ss:SSS} %5p %t %c{2}:%L - %m%n</pattern>
+            </encoder>
+        </appender>
         <appender name="ROLLING-FILE"
                   class="ch.qos.logback.core.rolling.RollingFileAppender">
             <encoder>
@@ -15,13 +19,22 @@
                 <fileNamePattern>${LOG_FILE}.%d{yyyy-MM-dd}.log</fileNamePattern>
             </rollingPolicy>
         </appender>
-        <root level="ERROR">
+        <logger name="javax.net" level="INFO"/>
+        <logger name="javax.management" level="INFO"/>
+        <logger name="org.springframework" level="INFO"/>
+        <logger name="com.zq" level="info"/>
+        <root level="INFO">
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="ROLLING-FILE"/>
         </root>
     </springProfile>
 
     <springProfile name="prod">
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>%d{yy-MMMM-dd HH:mm:ss:SSS} %5p %t %c{2}:%L - %m%n</pattern>
+            </encoder>
+        </appender>
         <appender name="ROLLING-FILE"
                   class="ch.qos.logback.core.rolling.RollingFileAppender">
             <encoder>
@@ -36,8 +49,12 @@
                 </timeBasedFileNamingAndTriggeringPolicy>
             </rollingPolicy>
         </appender>
-
-        <root level="ERROR">
+        <logger name="javax.net" level="INFO"/>
+        <logger name="javax.management" level="INFO"/>
+        <logger name="org.springframework" level="INFO"/>
+        <logger name="com.zq" level="INFO"/>
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
             <appender-ref ref="ROLLING-FILE"/>
         </root>
     </springProfile>

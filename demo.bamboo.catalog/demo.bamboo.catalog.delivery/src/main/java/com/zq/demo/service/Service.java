@@ -137,7 +137,9 @@ public class Service {
             command.append(" ps -ef | grep 'python ").append(PYTHON_NAME).append("' ");
             String response = executer.execute(command.toString());
             if(execDto.getPid().equals(getPid(session))) {
-                command.append(" kill -9  ").append(execDto.getPid());
+                StringBuilder killCommand = new StringBuilder();
+                killCommand.append(" kill -9 ").append(execDto.getPid());
+                response = executer.execute(killCommand.toString());
             }else{
                 throw new IllegalArgumentException(" the process is not existed");
             }
