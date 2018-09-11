@@ -4,9 +4,8 @@ import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.streaming.kafka010._
 import org.apache.spark.streaming.kafka010.LocationStrategies.PreferConsistent
 import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe
+import org.apache.spark.SparkConf
 import org.apache.spark.streaming.{Minutes, Seconds, StreamingContext}
-import org.apache.spark._
-
 
 object StreamingKafkaDemo {
   
@@ -16,7 +15,7 @@ object StreamingKafkaDemo {
     var appName = "demoCatalog"
     val conf = new SparkConf().setAppName(appName).setMaster(master)
     val ssc = new StreamingContext(conf, Seconds(1))
-
+    
     val kafkaParams = Map[String, Object](
         "bootstrap.servers" -> "kafka100:9092",
         "key.deserializer" -> classOf[StringDeserializer],
@@ -26,16 +25,12 @@ object StreamingKafkaDemo {
         "enable.auto.commit" -> (false: java.lang.Boolean)
     )
 
-    val topics = Array("demo")
-    
+    val topicsSet = Array("demo")
+    val consumerStrategy = ConsumerStrategies.Subscribe[String, String](
+            topicsSet, kafkaParams)
     val stream = KafkaUtils.createDirectStream[String, String](
-        streamingContext,
-        PreferConsistent,
-        Subscribe[String, String](topics, kafkaParams)
-    )
-    
-    stream.map(record => (record.key, record.value))
-    stream.print()
+            ssc, PreferConsistent, consumerStrategy)
+    stream.map(s =>(s.key(),s.value())).print();    
     ssc.start()
     ssc.awaitTermination()
   }
