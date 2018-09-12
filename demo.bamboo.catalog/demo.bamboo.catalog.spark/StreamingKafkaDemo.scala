@@ -25,12 +25,17 @@ object StreamingKafkaDemo {
         "enable.auto.commit" -> (false: java.lang.Boolean)
     )
 
-    val topicsSet = Array("demo")
+    val topicsSet = Array("test")
     val consumerStrategy = ConsumerStrategies.Subscribe[String, String](
             topicsSet, kafkaParams)
     val stream = KafkaUtils.createDirectStream[String, String](
             ssc, PreferConsistent, consumerStrategy)
-    stream.map(s =>(s.key(),s.value())).print();    
+    stream.foreachRDD { rdd => 
+        rdd.foreach { record =>
+            println(record.value())
+        }   
+    }  
+    println("=================> hello, we will start it")    
     ssc.start()
     ssc.awaitTermination()
   }
