@@ -19,6 +19,17 @@ object DemoReadCSVFile {
   }
 
   def main(args: Array[String]): Unit = {
+    val conf = new SparkConf().setMaster("spark://spark114:7077").setAppName("DemoReadCSVFile")
+    val sc = new SparkContext(conf)
+    val spark = SparkSession.builder
+      .config(conf = conf)
+      .appName("spark session example")
+      .getOrCreate()
 
+    val path = "/home/centos/upload/smallsample.csv"
+    val df = spark.read.option("header", "true").csv(path)
+    df.createOrReplaceTempView("catalog")
+    val sqlDF = spark.sql(" SELECT key,value FROM catalog  where key is not null and value is not null group by key,value")
+    sqlDF.show()
   }
 }
