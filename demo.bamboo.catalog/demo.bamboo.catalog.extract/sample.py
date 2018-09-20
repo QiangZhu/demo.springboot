@@ -11,7 +11,7 @@ from random import randint
 """
 
 filename = 'sample.csv'
-max_row = 10000
+max_row = 1000000
 components = ['engine','gear','radio','window']
 values_engine = 10
 values_gear = 10
@@ -56,7 +56,7 @@ class LogThread ( threading.Thread ):
     
     def run(self):
         num_row = 0
-        num_good = 0
+        num_good = 100
         with open(filename, "a") as file:
             while num_row < max_row :
                 if num_good < 99 :
