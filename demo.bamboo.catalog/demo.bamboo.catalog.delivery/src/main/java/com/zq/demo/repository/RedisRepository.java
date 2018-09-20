@@ -25,5 +25,6 @@ public interface RedisRepository {
      * find a movie
      */
     FinalData findByKeyValue(String keyValue);
-    
+
+    void removeAll();
 }

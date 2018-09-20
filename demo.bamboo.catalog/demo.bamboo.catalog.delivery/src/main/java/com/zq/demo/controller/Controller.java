@@ -30,6 +30,12 @@ public class Controller {
         return service.getall();
     }
 
+    @GetMapping("removeall")
+    @ResponseBody
+    public List<FinalDto> removeall() {
+        return service.removeall();
+    }
+
     @PostMapping("/delivery")
     @ResponseBody
     public SshConfigDto delivery(@RequestBody SshConfigDto sshConfigDto) {
@@ -45,6 +51,17 @@ public class Controller {
             logger.error("It's failed to delivery {},",sshConfigDto,e);
         }
         return sshConfigDto;
+    }
+
+    @PostMapping("/sample")
+    @ResponseBody
+    public ExecDto sample(@RequestBody ExecDto execDto){
+        try{
+            return  service.sample(execDto);
+        }catch(Exception e){
+            logger.error("It's failed to execute {}",execDto,e);
+        }
+        return execDto;
     }
 
     @PostMapping("/execute")

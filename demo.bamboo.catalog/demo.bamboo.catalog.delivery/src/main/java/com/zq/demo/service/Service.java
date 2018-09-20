@@ -24,7 +24,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Service {
 
     private static final Logger logger = LoggerFactory.getLogger(Service.class);
-    private static final String PYTHON_NAME = "extract.py";
+    private static final String EXTRACT_NAME = "extract.py";
+    private static final String SAMPLE_NAME = "sample.py";
 
     @Autowired
     private RedisRepository redisRepository;
@@ -63,6 +64,12 @@ public class Service {
         return result;
     }
 
+    public List<FinalDto>  removeall() {
+        List<FinalDto> results = new ArrayList<>();
+        redisRepository.removeAll();
+        return results;
+    }
+
     public void deliver() throws IOException, JSchException {
         SshSession sshSession = new SshSession();
         Session session = sshSession.openSession(sshConfig.getUser(), sshConfig.getPassword(),
@@ -88,7 +95,7 @@ public class Service {
         SshShellExecuter executer = new SshShellExecuter(session);
         StringBuilder command = new StringBuilder();
         command.append(" cd ").append(sshConfig.getTargetDir()).append(" ; ");
-        command.append(" nohup python ").append(PYTHON_NAME)
+        command.append(" nohup python ").append(EXTRACT_NAME)
                 .append(" </dev/null >/dev/null 2>&1 & ");
         executer.execute(command.toString());
         execDto.setPid(getPid(session));
@@ -99,9 +106,9 @@ public class Service {
         SshShellExecuter executer = new SshShellExecuter(session);
         StringBuilder check = new StringBuilder();
         check.append("ps -ef | grep ").append("\"").append(session.getUserName()).append(".*python ")
-                .append(PYTHON_NAME).append("\"");
+                .append(EXTRACT_NAME).append("\"");
         String response = executer.execute(check.toString());
-        int keyIndex = response.indexOf(PYTHON_NAME);
+        int keyIndex = response.indexOf(EXTRACT_NAME);
         String pid = "";
         if (keyIndex != -1 ){
             String s  = response.substring(0,keyIndex);
@@ -134,7 +141,7 @@ public class Service {
         executer = new SshShellExecuter(session);
         StringBuilder command = new StringBuilder();
         if(!StringUtil.isNullOrEmpty(execDto.getPid())){
-            command.append(" ps -ef | grep 'python ").append(PYTHON_NAME).append("' ");
+            command.append(" ps -ef | grep 'python ").append(EXTRACT_NAME).append("' ");
             String response = executer.execute(command.toString());
             if(execDto.getPid().equals(getPid(session))) {
                 StringBuilder killCommand = new StringBuilder();
@@ -146,6 +153,25 @@ public class Service {
         }else{
             throw new IllegalArgumentException(" arguremnt is Illegal");
         }
+        return execDto;
+    }
+
+
+    public ExecDto sample(ExecDto execDto) throws IOException, JSchException {
+        SshSession sshSession = new SshSession();
+        String ip = StringUtil.isNullOrEmpty(execDto.getIp()) ? sshConfig.getIp() : execDto.getIp();
+        String port = StringUtil.isNullOrEmpty(execDto.getPort()) ? sshConfig.getPassword() : execDto.getPort();
+        String user = StringUtil.isNullOrEmpty(execDto.getUser()) ? sshConfig.getUser() : execDto.getUser();
+        String password = StringUtil.isNullOrEmpty(execDto.getPassord()) ? sshConfig.getPassword()
+                : execDto.getPassord() ;
+        Session session = sshSession.openSession(user, password, ip, port);
+        SshShellExecuter executer = new SshShellExecuter(session);
+        StringBuilder command = new StringBuilder();
+        command.append(" cd ").append(sshConfig.getTargetDir()).append(" ; ");
+        command.append(" nohup python ").append(SAMPLE_NAME)
+                .append(" </dev/null >/dev/null 2>&1 & ");
+        executer.execute(command.toString());
+        execDto.setPid(getPid(session));
         return execDto;
     }
 }

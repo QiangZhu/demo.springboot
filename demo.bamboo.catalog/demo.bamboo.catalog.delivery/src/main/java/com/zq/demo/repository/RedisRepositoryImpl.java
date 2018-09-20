@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
+import org.thymeleaf.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import java.util.Map;
@@ -28,7 +29,10 @@ public class RedisRepositoryImpl implements RedisRepository {
     
     public void add(final FinalData demoData) {
         String keyValue = demoData.getKey()+","+demoData.getValue();
-        hashOperations.put(KEY, keyValue, keyValue);
+        keyValue = keyValue.replaceAll("\n","");
+        if(!StringUtils.isEmptyOrWhitespace(keyValue)) {
+            hashOperations.put(KEY, keyValue, keyValue);
+        }
     }
 
     public void delete(final String key) {
@@ -38,7 +42,15 @@ public class RedisRepositoryImpl implements RedisRepository {
     public FinalData findByKeyValue(final String keyValue){
         return (FinalData) hashOperations.get(KEY, keyValue);
     }
-    
+
+    @Override
+    public void removeAll() {
+        Map<String,String> map = hashOperations.entries(KEY);
+        for(String hkey : map.keySet()){
+            hashOperations.delete(KEY,hkey);
+        }
+    }
+
     public Map<String, String> findAllDemoDatas(){
         return hashOperations.entries(KEY);
     }
